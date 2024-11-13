@@ -408,5 +408,72 @@ public class UserServiceImpl implements UserDetailsService {
         return null;
     }
 
+    @Override
+    public ForgotAccountResponse forgotPassword(ForgotAccountRequest forgotAccountRequest) throws SystemException {
+        logger.info("Request received -> {}", forgotAccountRequest);
+        if (Strings.isNullOrEmpty(forgotAccountRequest.getEmailId())) {
+            logger.error("forgotPassword: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        UserAccount userAccount = userAccountRepository.findByEmailId(forgotAccountRequest.getEmailId().toLowerCase());
+        if (userAccount == null) {
+            logger.error("forgotPassword: User account doesn't exists");
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+
+        logger.info("forgotPassword: Response sent successfully for emailId -> {}", forgotAccountRequest.getEmailId());
+        ForgotAccountResponse forgotAccountResponse = new ForgotAccountResponse();
+        forgotAccountResponse.setEmailId(forgotAccountRequest.getEmailId());
+        forgotAccountResponse.setLoginId(userAccount.getLoginId());
+        forgotAccountResponse.setStatus(Constants.STATUS_SUCCESS);
+        return forgotAccountResponse;
+    }
+
+    @Override
+    public ForgotAccountResponse forgotLoginId(ForgotAccountRequest forgotAccountRequest) throws SystemException {
+        logger.info("Request received -> {}", forgotAccountRequest);
+        if (Strings.isNullOrEmpty(forgotAccountRequest.getEmailId())) {
+            logger.error("forgotLoginId: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        UserAccount userAccount = userAccountRepository.findByEmailId(forgotAccountRequest.getEmailId().toLowerCase());
+        if (userAccount == null) {
+            logger.error("forgotLoginId: User account doesn't exists");
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+
+        logger.info("forgotLoginId: Response sent successfully for emailId -> {}", forgotAccountRequest.getEmailId());
+        ForgotAccountResponse forgotAccountResponse = new ForgotAccountResponse();
+        forgotAccountResponse.setEmailId(forgotAccountRequest.getEmailId());
+        forgotAccountResponse.setLoginId(userAccount.getLoginId());
+        forgotAccountResponse.setStatus(Constants.STATUS_SUCCESS);
+        return forgotAccountResponse;
+    }
+
+    @Override
+    public UpdatePasswordResponse updatePassword(UpdatePasswordRequest updatePasswordRequest) throws SystemException {
+        logger.info("Request received -> {}", updatePasswordRequest);
+        if (Strings.isNullOrEmpty(updatePasswordRequest.getLoginId()) || Strings.isNullOrEmpty(updatePasswordRequest.getPassword())) {
+            logger.error("updatePassword: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        UserAccount userAccount = userAccountRepository.findByLoginId(updatePasswordRequest.getLoginId().toLowerCase());
+        if (userAccount == null) {
+            logger.error("updatePasswordRequest: User account doesn't exists for loginId -> {}", updatePasswordRequest.getLoginId());
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+        userAccount.setPassword(updatePasswordRequest.getPassword());
+        userAccount.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+        userAccountRepository.save(userAccount);
+        logger.info("updatePasswordRequest: Updated successfully");
+        UpdatePasswordResponse updatePasswordResponse = new UpdatePasswordResponse();
+        updatePasswordResponse.setLoginId(userAccount.getLoginId());
+        updatePasswordResponse.setEmailId(userAccount.getEmailId());
+        updatePasswordResponse.setStatus(Constants.STATUS_SUCCESS);
+        return updatePasswordResponse;
+    }
+
+
+
 
 }

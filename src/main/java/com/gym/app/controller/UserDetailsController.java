@@ -93,4 +93,25 @@ public class UserDetailsController extends BaseController {
         return new ResponseEntity<>(userService.retrieveUserHealthProfile(retrieveUserProfileRequest), HttpStatus.OK);
     }
 
+    @PostMapping(value = ApiRoute.USER_FORGOT_PASSWORD)
+    public ResponseEntity<ForgotAccountResponse> forgotPassword(@RequestBody ForgotAccountRequest forgotAccountRequest) throws BaseException {
+        logger.info("forgotPassword: Received");
+        return new ResponseEntity<>(userService.forgotPassword(forgotAccountRequest), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiRoute.USER_FORGOT_LOGINID)
+    public ResponseEntity<ForgotAccountResponse> forgotLoginId(@RequestBody ForgotAccountRequest forgotAccountRequest) throws BaseException {
+        logger.info("forgotLoginId: Received");
+        return new ResponseEntity<>(userService.forgotLoginId(forgotAccountRequest), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiRoute.USER_UPDATE_PASSWORD)
+    public ResponseEntity<UpdatePasswordResponse> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) throws BaseException {
+        logger.info("updatePassword: Received");
+        return new ResponseEntity<>(userService.updatePassword(updatePasswordRequest), HttpStatus.OK);
+    }
+
+
+
+
 }

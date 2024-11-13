@@ -27,4 +27,11 @@ public interface UserDetailsService {
 
     UserHealthProfileResponse retrieveUserHealthProfile(RetrieveUserProfileRequest retrieveUserProfileRequest) throws SystemException;
 
+    ForgotAccountResponse forgotPassword(ForgotAccountRequest forgotAccountRequest) throws SystemException;
+
+    ForgotAccountResponse forgotLoginId(ForgotAccountRequest forgotAccountRequest) throws SystemException;
+
+    UpdatePasswordResponse updatePassword(UpdatePasswordRequest updatePasswordRequest) throws SystemException;
+
+
 }
