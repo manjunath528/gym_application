@@ -27,6 +27,13 @@ public class ApiRoute {
     public static final String USER_ACCOUNT_HEALTH_PROFILE_RETRIEVE = "/user/account/retrievehealthProfile";
     public static final String USER_ACCOUNT_DETAILS_DELETE = "/user/loginId/delete";
     public static final String USER_THANKS = "/user/thanks";
+
+    public static final String MESSAGE_CENTER_SEND = "/messageCenter/sendMessage";
+    public static final String MESSAGE_CENTER_BY_LOGIN_ID_STATUS = "/messageCenter/retrieveByStatus";
+
+    public static final String MESSAGE_CENTER_BY_LOGIN_ID_METADATA_READ = "/messageCenter/retrieveReadMessagesByMetaData";
+    public static final String MESSAGE_CENTER_BY_LOGIN_ID_METADATA_UNREAD = "/messageCenter/retrieveUnReadMessagesByMetaData";
+    public static final String MESSAGE_CENTER_UPDATE_METADATA = "/messageCenter/metadata";
     private ApiRoute() {
     }
 

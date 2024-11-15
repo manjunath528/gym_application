@@ -1,0 +1,178 @@
+package com.gym.app.service.impl;
+
+import com.google.common.base.Strings;
+import com.gym.app.baseframework.exception.SystemException;
+import com.gym.app.baseframework.exception.enums.ApiErrors;
+import com.gym.app.common.Constants;
+import com.gym.app.common.DateTimeFormatterUtil;
+import com.gym.app.entity.MessageCenter;
+import com.gym.app.repository.MessageCenterRepository;
+import com.gym.app.service.MessageCenterService;
+import com.gym.app.service.dto.MessageCenterRequest;
+import com.gym.app.service.dto.MessageCenterRetrieveRequest;
+import com.gym.app.service.dto.MessageCenterUpdateRequest;
+import com.gym.app.service.dto.MessageUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class MessageCenterServiceImpl implements MessageCenterService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageCenterService.class);
+
+    @Autowired
+    MessageCenterRepository messageCenterRepository;
+
+    @Override
+    public List<MessageCenter> sendMessage(List<MessageCenterRequest> messageCenterRequestList) throws SystemException {
+        logger.info("sendMessage: Request -> {}", messageCenterRequestList);
+        List<MessageCenter> messageCenterList = new ArrayList<>();
+        for (MessageCenterRequest messageCenterRequest : messageCenterRequestList) {
+            if (Strings.isNullOrEmpty(messageCenterRequest.getTargetLoginId()) || Strings.isNullOrEmpty(messageCenterRequest.getMessage())) {
+                logger.error("sendMessage: Missing mandatory data for {}", messageCenterRequest);
+                throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+            }
+            MessageCenter messageCenter = new MessageCenter();
+            messageCenter.setTargetLoginId(messageCenterRequest.getTargetLoginId());
+            messageCenter.setSourceLoginId(messageCenterRequest.getSourceLoginId());
+            messageCenter.setMessage(messageCenterRequest.getMessage());
+            messageCenter.setIsRead(Constants.STATUS_NO);
+            messageCenter.setStatus(Constants.STATUS_ACTIVE);
+            messageCenter.setCreatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+            messageCenter.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+            messageCenterRepository.save(messageCenter);
+            logger.info("sendMessage: Response sent successfully");
+            messageCenterList.add(messageCenter);
+        }
+        return messageCenterList;
+    }
+
+    @Override
+    public List<MessageCenter> triggerMessage(String sourceLoginId, String targetLoginId, String message, Long packDetailsId) throws SystemException {
+        List<MessageCenterRequest> messageCenterRequestList = new ArrayList<>();
+        MessageCenterRequest messageCenterRequest = new MessageCenterRequest();
+        messageCenterRequest.setSourceLoginId(sourceLoginId);
+        messageCenterRequest.setTargetLoginId(targetLoginId);
+        messageCenterRequest.setMessage(message);
+        messageCenterRequestList.add(messageCenterRequest);
+        return sendMessage(messageCenterRequestList);
+    }
+
+    @Override
+    public List<MessageCenter> retrieveMessagesByLoginIdAndStatus(MessageCenterRetrieveRequest messageCenterRetrieveRequest) throws SystemException {
+        logger.info("retrieveMessagesByLoginIdAndStatus: Request -> {}", messageCenterRetrieveRequest);
+        if (Strings.isNullOrEmpty(messageCenterRetrieveRequest.getLoginId())) {
+            logger.error("retrieveMessagesByLoginIdAndStatus: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        List<String> statusList = new ArrayList<>();
+        if (!Strings.isNullOrEmpty(messageCenterRetrieveRequest.getStatus())) {
+            statusList.add(messageCenterRetrieveRequest.getStatus().toLowerCase());
+        } else {
+            statusList.add(Constants.STATUS_ACTIVE.toLowerCase());
+            statusList.add(Constants.STATUS_INACTIVE.toLowerCase());
+            statusList.add(Constants.STATUS_EXPIRED.toLowerCase());
+        }
+
+        List<MessageCenter> messageCenterList = messageCenterRepository.retrieveMessagesByLoginIdAndStatus(messageCenterRetrieveRequest.getLoginId().toLowerCase(), statusList);
+        logger.info("retrieveMessagesByLoginIdAndStatus: Response sent successfully");
+        return messageCenterList;
+    }
+    @Override
+    public List<MessageCenter> retrieveMessagesByLoginIdAndMetaData(MessageCenterRetrieveRequest messageCenterRetrieveRequest, boolean onlyReadMessagesFlag) throws SystemException {
+        logger.info("retrieveMessagesByLoginIdAndMetaData: Request -> {}, onlyReadMessagesFlag -> {}", messageCenterRetrieveRequest, onlyReadMessagesFlag);
+        if (Strings.isNullOrEmpty(messageCenterRetrieveRequest.getLoginId())) {
+            logger.error("retrieveMessagesByLoginIdAndMetaData: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        List<String> statusList = new ArrayList<>();
+        if (!Strings.isNullOrEmpty(messageCenterRetrieveRequest.getStatus())) {
+            statusList.add(messageCenterRetrieveRequest.getStatus().toLowerCase());
+        } else {
+            statusList.add(Constants.STATUS_ACTIVE.toLowerCase());
+            statusList.add(Constants.STATUS_INACTIVE.toLowerCase());
+            statusList.add(Constants.STATUS_EXPIRED.toLowerCase());
+        }
+        String onlyReadMessages = Constants.STATUS_NO;
+        if (onlyReadMessagesFlag) {
+            onlyReadMessages = Constants.STATUS_YES;
+        }
+        List<MessageCenter> messageCenterList = messageCenterRepository.retrieveMessagesByLoginIdAndMetaData(messageCenterRetrieveRequest.getLoginId().toLowerCase(), statusList, onlyReadMessages.toLowerCase());
+        logger.info("retrieveMessagesByLoginIdAndMetaData: Response sent successfully");
+        return messageCenterList;
+    }
+
+    @Override
+    public MessageCenter updateMessageMetaData(MessageCenterUpdateRequest messageCenterUpdateRequest) throws SystemException {
+        logger.info("updateMessageMetaData: Request -> {}", messageCenterUpdateRequest);
+        if ((messageCenterUpdateRequest.getMessageCenterId() == 0) || Strings.isNullOrEmpty(messageCenterUpdateRequest.getLoginId())) {
+            logger.error("updateMessageMetaData: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        String messageAcceptanceStatus = Constants.STATUS_ACCEPTED;
+        if (!Strings.isNullOrEmpty(messageCenterUpdateRequest.getMessageAcceptanceStatus())) {
+            messageAcceptanceStatus = messageCenterUpdateRequest.getMessageAcceptanceStatus();
+        }
+        Optional<MessageCenter> messageCenterOptional = messageCenterRepository.findById(messageCenterUpdateRequest.getMessageCenterId());
+        if (messageCenterOptional == null || !messageCenterOptional.isPresent()) {
+            logger.error("updateMessageMetaData: Message center details doesn't exists for id ->{}", messageCenterUpdateRequest.getMessageCenterId());
+            throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+        }
+        MessageCenter messageCenter = messageCenterOptional.get();
+        if (messageCenterUpdateRequest.getIsRead() != null) {
+            messageCenter.setIsRead(messageCenterUpdateRequest.getIsRead());
+        } else {
+            messageCenter.setIsRead(Constants.STATUS_NO);
+        }
+        if (!Strings.isNullOrEmpty(messageCenterUpdateRequest.getStatus())) {
+            messageCenter.setSourceLoginId(messageCenterUpdateRequest.getLoginId());
+        }
+        messageCenter.setMessageAcceptanceStatus(messageAcceptanceStatus);
+        messageCenter.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+        messageCenterRepository.save(messageCenter);
+        logger.info("updateMessageMetaData: Response sent successfully");
+        return messageCenter;
+    }
+
+    @Override
+    public List<MessageCenter> retrieveLastXMonthsHistoricalMessageCenterData(int durationMonths) throws SystemException {
+        logger.info("retrieveLastXMonthsHistoricalMessageCenterData: Retrieve for last {} months.", durationMonths);
+        List<MessageCenter> messageCenterList = messageCenterRepository.retrieveLastXMonthsHistoricalMessageCenterData(DateTimeFormatterUtil.getLastXMonthsUTCTimeStamp(durationMonths), DateTimeFormatterUtil.getCurrentTimestampInUTC());
+        logger.info("retrieveLastXMonthsHistoricalMessageCenterData: Returned response for last {} months of size {}.", durationMonths, messageCenterList.size());
+        return messageCenterList;
+    }
+
+    @Override
+    public MessageCenter updateMessage(MessageUpdateRequest messageUpdateRequest) throws SystemException {
+        logger.info("updateMessage: Request -> {}", messageUpdateRequest);
+        if(messageUpdateRequest.getMessageId() == null || Strings.isNullOrEmpty(messageUpdateRequest.getLoginId())) {
+            logger.error("updateMessage: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        Optional<MessageCenter> messageCenterOptional = messageCenterRepository.findById(messageUpdateRequest.getMessageId());
+        if(messageCenterOptional == null || !messageCenterOptional.isPresent()) {
+            logger.error("updateMessage: Message center doesn't exists for id ->{}", messageUpdateRequest.getMessageId());
+            throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+        }
+        if(!messageCenterOptional.get().getSourceLoginId().equals(messageUpdateRequest.getLoginId())) {
+            logger.error("updation not possible ->{}", messageUpdateRequest.getLoginId());
+            throw new SystemException(ApiErrors.NOT_POSSIBLE_FOR_USER);
+        }
+        MessageCenter messageCenter = messageCenterOptional.get();
+        if(messageCenter.getIsRead().equals(Constants.STATUS_YES)) {
+            logger.error("Message is already read -> {}", messageUpdateRequest.getMessageId());
+            throw new SystemException(ApiErrors.MESSAGE_ALREADY_READ);
+        }
+        messageCenter.setMessage(messageUpdateRequest.getMessage());
+        messageCenter.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+        messageCenterRepository.save(messageCenter);
+        logger.info("updateMessage: Response sent successfully");
+        return messageCenter;
+    }
+}

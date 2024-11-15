@@ -40,7 +40,9 @@ public enum ApiErrors {
     USER_ACCOUNT_INACTIVE(HttpStatus.INTERNAL_SERVER_ERROR.value(), 6007, "User account is Inactive"),
     USER_ACCOUNT_PASSWORD_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR.value(), 6008, "Login ID & password combination does not exist"),
     RECORD_EXISTS(HttpStatus.INTERNAL_SERVER_ERROR.value(), 6011, "Record already exists"),
-    INTERNAL_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), 7004, "Internal processing error");
+    INTERNAL_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), 7004, "Internal processing error"),
+    MESSAGE_ALREADY_READ(HttpStatus.INTERNAL_SERVER_ERROR.value(), 7005, "Message already read"),
+    NOT_POSSIBLE_FOR_USER(HttpStatus.INTERNAL_SERVER_ERROR.value(), 7006, "Not possible for user");
 
     public static final Map<String, ApiErrors> LOOKUP_BY_ERROR_DESCRIPTION = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     public static final Map<Integer, ApiErrors> LOOKUP_BY_ERROR_CODE = new TreeMap<>();
