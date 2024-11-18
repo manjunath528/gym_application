@@ -33,6 +33,9 @@ public class UserAccount implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Column(name= "membership_id")
+    private Long membership_id;
+
 
     @Column(name = "personal_details_status")
     private String personal_details_status;
@@ -81,6 +84,13 @@ public class UserAccount implements Serializable {
         this.password = password;
     }
 
+    public Long getMembership_id() {
+        return membership_id;
+    }
+
+    public void setMembership_id(Long membership_id) {
+        this.membership_id = membership_id;
+    }
 
     public String getPersonal_details_status() {
         return personal_details_status;
@@ -97,6 +107,7 @@ public class UserAccount implements Serializable {
     public void setHealth_details_status(String health_details_status) {
         this.health_details_status = health_details_status;
     }
+
 
     public Timestamp getCreatedTs() {
         return createdTs;
@@ -143,7 +154,8 @@ public class UserAccount implements Serializable {
                 ", loginId='" + loginId + '\'' +
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +
-                ", status='" + personal_details_status + '\'' +
+                ", membership_id=" + membership_id +
+                ", personal_details_status='" + personal_details_status + '\'' +
                 ", health_details_status='" + health_details_status + '\'' +
                 ", createdTs=" + createdTs +
                 ", updatedTs=" + updatedTs +

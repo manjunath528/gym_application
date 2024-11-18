@@ -16,6 +16,7 @@
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="password" type="varchar(128)"/>
+            <column name="membership_id" type="bigint"/>
             <column name="personal_details_status" type="varchar(128)"/>
             <column name="health_details_status" type="varchar(128)"/>
             <column name="created_ts" type="datetime"/>
@@ -142,6 +143,24 @@
                                  referencedColumnNames="id"
                                  referencedTableName="city"/>
 
+    </changeSet>
+
+    <changeSet id="memberships" author="Manjunath Reddy">
+        <createTable tableName="memberships">
+            <column name="id" type ="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_MEMBERSHIP_ID"/>
+            </column>
+            <column name="name" type="varchar(128)"/>
+            <column name="price" type="varchar(128)"/>
+            <column name="duration" type="varchar(128)"/>
+
+        </createTable>
+        <createSequence sequenceName="sequence_membership"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
     </changeSet>
 
 

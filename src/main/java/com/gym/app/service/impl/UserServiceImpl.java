@@ -1,9 +1,11 @@
 package com.gym.app.service.impl;
 
 import com.gym.app.baseframework.exception.enums.ApiErrors;
+import com.gym.app.entity.Membership;
 import com.gym.app.entity.UserAccount;
 import com.gym.app.entity.UserHealthDetails;
 import com.gym.app.entity.UserPersonalDetails;
+import com.gym.app.repository.MembershipRepository;
 import com.gym.app.repository.UserAccountRepository;
 import com.gym.app.repository.UserHealthDetailsRepository;
 import com.gym.app.repository.UserPersonalDetailsRepository;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import com.gym.app.baseframework.exception.SystemException;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserDetailsService {
 
@@ -32,6 +36,9 @@ public class UserServiceImpl implements UserDetailsService {
     UserPersonalDetailsRepository userPersonalDetailsRepository;
     @Autowired
     UserHealthDetailsRepository userHealthDetailsRepository;
+
+    @Autowired
+    MembershipRepository membershipRepository;
 
     @Override
     public UserSignUpResponse signUp(UserSignUpRequest userSignUpRequest) throws SystemException {
@@ -473,7 +480,34 @@ public class UserServiceImpl implements UserDetailsService {
         return updatePasswordResponse;
     }
 
+    @Override
+    public UserMembershipResponse chooseMembershipPlan(UserMembershipRequest userMembershipRequest) throws SystemException {
+        logger.info("Request received -> {}", userMembershipRequest);
+        if (userMembershipRequest.getMembershipId() == null || Strings.isNullOrEmpty(userMembershipRequest.getLoginId())) {
+            logger.error("chooseMembershipPlan: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        UserAccount userAccount = userAccountRepository.findByLoginId(userMembershipRequest.getLoginId().toLowerCase());
+        if (userAccount == null) {
+            logger.error("updatePasswordRequest: User account doesn't exists for loginId -> {}", userMembershipRequest.getLoginId());
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
 
+        Optional<Membership> membership = membershipRepository.findById(userMembershipRequest.getMembershipId());
+        if (!membership.isPresent() || membership == null) {
+            logger.error("chooseMembershipPlan: Membership not found for loginId -> {}", userMembershipRequest.getLoginId());
+            throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+        }
+        userAccount.setMembership_id(userMembershipRequest.getMembershipId());
+        userAccount.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+        userAccountRepository.save(userAccount);
+        logger.info("updateMembershipPlan: Updated successfully");
+        UserMembershipResponse userMembershipResponse = new UserMembershipResponse();
+        userMembershipResponse.setLoginId(userAccount.getLoginId());
+        userMembershipResponse.setEmail(userAccount.getEmailId());
+        userMembershipResponse.setMembershipName(membership.get().getName());
+        return userMembershipResponse;
+    }
 
 
 }

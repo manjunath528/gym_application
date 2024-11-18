@@ -8,7 +8,11 @@ public class ApiRoute {
     public static final String BASE_MAPPING_API_V1 = "/app/services/api/v1";
     public static final String METADATA = "/metadata";
     public static final String CONFIGURATION = "/config";
+    // Admin
+    public static final String ALL_MEMBERSHIPS = "/admin/memberships";
+    public static final String MEMBERSHIP = "/admin/memberships/retrieveByMembershipId";
     // All Other
+    public static final String MEMBERSHIP_PLAN = "/user/memberships/chooseMembershipPlan";
     public static final String CONTACT_US = "/contactUs";
     public static final String CONTACT_US_RETRIEVE_BY_CATEGORY_NAME = "/contactUs/retrieveByCategoryName";
     public static final String LOCATION_COUNTRY = "/location/country";

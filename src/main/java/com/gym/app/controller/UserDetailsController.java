@@ -111,6 +111,12 @@ public class UserDetailsController extends BaseController {
         return new ResponseEntity<>(userService.updatePassword(updatePasswordRequest), HttpStatus.OK);
     }
 
+    @PostMapping(value=ApiRoute.MEMBERSHIP_PLAN)
+    public ResponseEntity<UserMembershipResponse> chooseMembershipPlan(@RequestBody UserMembershipRequest userMembershipRequest) throws BaseException {
+        logger.info("membershipPlan: Received");
+        return new ResponseEntity<>(userService.chooseMembershipPlan(userMembershipRequest), HttpStatus.OK);
+    }
+
 
 
 

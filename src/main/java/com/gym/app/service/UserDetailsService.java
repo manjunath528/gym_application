@@ -33,5 +33,9 @@ public interface UserDetailsService {
 
     UpdatePasswordResponse updatePassword(UpdatePasswordRequest updatePasswordRequest) throws SystemException;
 
+    UserMembershipResponse chooseMembershipPlan(UserMembershipRequest userMembershipRequest) throws SystemException;
+
+
+
 
 }

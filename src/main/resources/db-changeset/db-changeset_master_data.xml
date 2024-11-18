@@ -8,6 +8,6 @@
         <loadData tableName="country" file="db_data/country.csv"/>
         <loadData tableName="state" file="db_data/state.csv"/>
         <loadData tableName="city" file="db_data/city.csv"/>
-
+        <loadData tableName="memberships" file="db_data/memberships.csv"/>
     </changeSet>
 </databaseChangeLog>
