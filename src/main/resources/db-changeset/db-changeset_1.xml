@@ -164,6 +164,54 @@
     </changeSet>
 
 
+    <changeSet id="workout" author="Manjunath Reddy">
+        <createTable tableName="workout">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_WORKOUT_ID"/>
+            </column>
+            <column name="workout_name" type="varchar(128)"/>
+            <column name="membership_id" type="bigint"/>
+            <column name="description" type="varchar(128)"/>
+        </createTable>
+        <createSequence sequenceName="sequence_workout"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+        <addForeignKeyConstraint baseColumnNames="membership_id"
+                                 baseTableName="workout"
+                                 constraintName="FMC_FK_MEMBERSHIP_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="memberships"/>
+    </changeSet>
+
+    <changeSet id="exercise" author="Manjunath Reddy">
+        <createTable tableName="exercise">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_EXERCISE_ID"/>
+            </column>
+            <column name="exercise_name" type="varchar(128)"/>
+            <column name="workout_id" type="bigint"/>
+            <column name="muscle_group" type="varchar(128)"/>
+            <column name="description" type="varchar(128)"/>
+        </createTable>
+        <createSequence sequenceName="sequence_exercise"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+        <addForeignKeyConstraint baseColumnNames="workout_id"
+                                 baseTableName="exercise"
+                                 constraintName="FMC_FK_WORKOUT_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="workout"/>
+    </changeSet>
 
 
 </databaseChangeLog>
