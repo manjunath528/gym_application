@@ -12,5 +12,5 @@ import java.util.List;
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
     @Query("SELECT workout FROM Workout workout WHERE workout.membershipId=:membershipId ORDER BY workout.workout ASC, workout.id ASC")
-    List<State> workoutDetailsByMembershipId(@Param("membershipId") Long membershipId);
+    List<Workout> workoutDetailsByMembershipId(@Param("membershipId") Long membershipId);
 }

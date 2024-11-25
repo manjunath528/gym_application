@@ -1,8 +1,11 @@
 package com.gym.app.service;
 
+import com.gym.app.entity.Workout;
 import com.gym.app.service.dto.*;
 
 import com.gym.app.baseframework.exception.SystemException;
+
+import java.util.List;
 
 
 public interface UserDetailsService {
@@ -34,6 +37,8 @@ public interface UserDetailsService {
     UpdatePasswordResponse updatePassword(UpdatePasswordRequest updatePasswordRequest) throws SystemException;
 
     UserMembershipResponse chooseMembershipPlan(UserMembershipRequest userMembershipRequest) throws SystemException;
+    List<Workout> getWorkoutsByLoginId(String loginId) throws SystemException;
+
 
 
 

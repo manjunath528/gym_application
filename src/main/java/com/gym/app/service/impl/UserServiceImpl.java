@@ -1,14 +1,8 @@
 package com.gym.app.service.impl;
 
 import com.gym.app.baseframework.exception.enums.ApiErrors;
-import com.gym.app.entity.Membership;
-import com.gym.app.entity.UserAccount;
-import com.gym.app.entity.UserHealthDetails;
-import com.gym.app.entity.UserPersonalDetails;
-import com.gym.app.repository.MembershipRepository;
-import com.gym.app.repository.UserAccountRepository;
-import com.gym.app.repository.UserHealthDetailsRepository;
-import com.gym.app.repository.UserPersonalDetailsRepository;
+import com.gym.app.entity.*;
+import com.gym.app.repository.*;
 import com.gym.app.service.UserDetailsService;
 import com.gym.app.service.UserService;
 import com.gym.app.service.dto.*;
@@ -22,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.gym.app.baseframework.exception.SystemException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +35,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     MembershipRepository membershipRepository;
+
+    @Autowired
+    WorkoutRepository workoutRepository;
 
     @Override
     public UserSignUpResponse signUp(UserSignUpRequest userSignUpRequest) throws SystemException {
@@ -498,7 +497,7 @@ public class UserServiceImpl implements UserDetailsService {
             logger.error("chooseMembershipPlan: Membership not found for loginId -> {}", userMembershipRequest.getLoginId());
             throw new SystemException(ApiErrors.NO_RECORD_FOUND);
         }
-        userAccount.setMembership_id(userMembershipRequest.getMembershipId());
+        userAccount.setMembershipId(userMembershipRequest.getMembershipId());
         userAccount.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
         userAccountRepository.save(userAccount);
         logger.info("updateMembershipPlan: Updated successfully");
@@ -507,6 +506,27 @@ public class UserServiceImpl implements UserDetailsService {
         userMembershipResponse.setEmail(userAccount.getEmailId());
         userMembershipResponse.setMembershipName(membership.get().getName());
         return userMembershipResponse;
+    }
+
+    @Override
+    public List<Workout> getWorkoutsByLoginId(String loginId) throws SystemException {
+        logger.info("Request received -> {}", loginId);
+        if(loginId == null) {
+            logger.error("getWorkoutsByLoginId: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        UserAccount userAccount = userAccountRepository.findByLoginId(loginId.toString());
+        if(userAccount == null) {
+            logger.info("User doesn't exists for loginId -> {}", loginId);
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+        Long membershipId = userAccount.getMembershipId();
+        if(membershipId == null || membershipId == 0) {
+            logger.error("getWorkoutsByLoginId: User doesn't subscribed the Memebership ->{}", loginId);
+            throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+        }
+        List<Workout> workoutList = workoutRepository.workoutDetailsByMembershipId(membershipId);
+       return workoutList;
     }
 
 

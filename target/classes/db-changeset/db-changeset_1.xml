@@ -16,7 +16,7 @@
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="password" type="varchar(128)"/>
-            <column name="membership_id" type="bigint"/>
+            <column name="membershipId" type="bigint"/>
             <column name="personal_details_status" type="varchar(128)"/>
             <column name="health_details_status" type="varchar(128)"/>
             <column name="created_ts" type="datetime"/>

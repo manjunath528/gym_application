@@ -3,6 +3,7 @@ package com.gym.app.controller;
 
 import com.gym.app.baseframework.controller.BaseController;
 import com.gym.app.baseframework.exception.BaseException;
+import com.gym.app.entity.Workout;
 import com.gym.app.service.UserDetailsService;
 import com.gym.app.service.UserService;
 import com.gym.app.service.dto.*;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(ApiRoute.BASE_MAPPING_API_V1)
@@ -117,6 +120,11 @@ public class UserDetailsController extends BaseController {
         return new ResponseEntity<>(userService.chooseMembershipPlan(userMembershipRequest), HttpStatus.OK);
     }
 
+    @PostMapping(value = ApiRoute.WORKOUT_DETAILS_BY_LOGIN_ID)
+    public ResponseEntity<List<Workout>> getWorkoutsByLoginId(@RequestParam(value = "loginId") String loginId) throws BaseException {
+        logger.info("getWorkoutsByLoginId: Received");
+        return new ResponseEntity<>(userService.getWorkoutsByLoginId(loginId), HttpStatus.OK);
+    }
 
 
 

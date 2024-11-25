@@ -34,7 +34,7 @@ public class UserAccount implements Serializable {
     private String password;
 
     @Column(name= "membership_id")
-    private Long membership_id;
+    private Long membershipId;
 
 
     @Column(name = "personal_details_status")
@@ -84,12 +84,12 @@ public class UserAccount implements Serializable {
         this.password = password;
     }
 
-    public Long getMembership_id() {
-        return membership_id;
+    public Long getMembershipId() {
+        return membershipId;
     }
 
-    public void setMembership_id(Long membership_id) {
-        this.membership_id = membership_id;
+    public void setMembershipId(Long membership_id) {
+        this.membershipId = membership_id;
     }
 
     public String getPersonal_details_status() {
@@ -154,7 +154,7 @@ public class UserAccount implements Serializable {
                 ", loginId='" + loginId + '\'' +
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +
-                ", membership_id=" + membership_id +
+                ", membership_id=" + membershipId +
                 ", personal_details_status='" + personal_details_status + '\'' +
                 ", health_details_status='" + health_details_status + '\'' +
                 ", createdTs=" + createdTs +
