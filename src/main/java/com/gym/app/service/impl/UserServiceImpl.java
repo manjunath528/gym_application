@@ -39,6 +39,9 @@ public class UserServiceImpl implements UserDetailsService {
     @Autowired
     WorkoutRepository workoutRepository;
 
+    @Autowired
+    ExerciseRepository exerciseRepository;
+
     @Override
     public UserSignUpResponse signUp(UserSignUpRequest userSignUpRequest) throws SystemException {
         logger.info("Request received -> {}", userSignUpRequest);
@@ -527,6 +530,26 @@ public class UserServiceImpl implements UserDetailsService {
         }
         List<Workout> workoutList = workoutRepository.workoutDetailsByMembershipId(membershipId);
        return workoutList;
+    }
+
+    @Override
+    public ExerciseResponse getExerciseById(Long id) throws SystemException {
+        logger.info("Request received -> {}", id);
+        if(id == null) {
+            logger.error("getExerciseById: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        Exercise exercise = exerciseRepository.findById(id).orElse(null);
+        if(exercise == null) {
+            logger.error("getExerciseById: Exercise not found for id -> {}", id);
+            throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+        }
+        ExerciseResponse exerciseResponse = new ExerciseResponse();
+        exerciseResponse.setId(exercise.getId());
+        exerciseResponse.setName(exercise.getExerciseName());
+        exerciseResponse.setMuscleGroup(exercise.getMuscleGroup());
+        exerciseResponse.setDescription(exercise.getDescription());
+        return exerciseResponse;
     }
 
 

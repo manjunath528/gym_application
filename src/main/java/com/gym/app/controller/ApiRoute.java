@@ -39,6 +39,7 @@ public class ApiRoute {
     public static final String MESSAGE_CENTER_BY_LOGIN_ID_METADATA_UNREAD = "/messageCenter/retrieveUnReadMessagesByMetaData";
     public static final String MESSAGE_CENTER_UPDATE_METADATA = "/messageCenter/metadata";
     public static final String WORKOUT_DETAILS_BY_LOGIN_ID = "/workout/details/retrieveByLoginId";
+    public static final String EXERCISE_DETAILS_BY_ID = "/exercise/details/retrieveById";
     private ApiRoute() {
     }
 

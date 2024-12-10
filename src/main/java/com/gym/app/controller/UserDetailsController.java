@@ -126,6 +126,12 @@ public class UserDetailsController extends BaseController {
         return new ResponseEntity<>(userService.getWorkoutsByLoginId(loginId), HttpStatus.OK);
     }
 
+    @GetMapping(value = ApiRoute.EXERCISE_DETAILS_BY_ID)
+    public ResponseEntity<ExerciseResponse> getExerciseDetailsById(@RequestParam(value="id") Long id) throws BaseException {
+        logger.info("getExerciseDetailsById: Received");
+        return new ResponseEntity<>(userService.getExerciseById(id), HttpStatus.OK);
+    }
+
 
 
 }
