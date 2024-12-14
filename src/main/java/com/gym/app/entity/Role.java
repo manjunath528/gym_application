@@ -1,4 +1,4 @@
-package com.app.project.entity;
+package com.gym.app.entity;
 
 public enum Role {
     USER,
