@@ -40,6 +40,7 @@ public class ApiRoute {
     public static final String MESSAGE_CENTER_UPDATE_METADATA = "/messageCenter/metadata";
     public static final String WORKOUT_DETAILS_BY_LOGIN_ID = "/workout/details/retrieveByLoginId";
     public static final String EXERCISE_DETAILS_BY_ID = "/exercise/details/retrieveById";
+    public static final String EXERCISE_DETAILS_BY_ID_LIST = "/exercise/details/retrieveByIds";
     private ApiRoute() {
     }
 

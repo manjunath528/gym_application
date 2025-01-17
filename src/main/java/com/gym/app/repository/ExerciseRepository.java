@@ -13,4 +13,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     @Query("SELECT exercise FROM Exercise exercise WHERE exercise.workoutId=:workoutId ORDER BY exercise.exerciseName ASC, exercise.id ASC")
     List<State> exerciseDetailsByWorkoutId(@Param("workoutId") Long workoutId);
+
+    @Query("SELECT exercise FROM Exercise exercise WHERE exercise.workoutId IN :workoutIds")
+    List<Exercise> findByWorkoutIdList(@Param("workoutIds") List<Long> workoutIds);
 }
