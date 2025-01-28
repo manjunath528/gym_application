@@ -8,11 +8,11 @@
         <version>3.3.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.telusko</groupId>
+    <groupId>com.gym</groupId>
     <artifactId>GymApplication</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Part29-SpringSecEx</name>
-    <description>Part29-SpringSecEx</description>
+    <name>GymApplication</name>
+    <description>GymApplication</description>
     <url/>
     <licenses>
         <license/>
@@ -124,9 +124,14 @@
 
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.6</version>
+                <configuration>
+                    <mainClass>com.gym.app.Application</mainClass> <!-- Specify your main class here -->
+                </configuration><!-- Make sure you use the correct version -->
             </plugin>
         </plugins>
     </build>
