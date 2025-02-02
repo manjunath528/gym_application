@@ -9,5 +9,7 @@
         <loadData tableName="state" file="db_data/state.csv"/>
         <loadData tableName="city" file="db_data/city.csv"/>
         <loadData tableName="memberships" file="db_data/memberships.csv"/>
+        <loadData tableName="workout" file="db_data/workouts.csv"/>
+        <loadData tableName="exercise" file="db_data/exercises.csv"/>
     </changeSet>
 </databaseChangeLog>
