@@ -41,6 +41,7 @@ public class ApiRoute {
     public static final String WORKOUT_DETAILS_BY_LOGIN_ID = "/workout/details/retrieveByLoginId";
     public static final String EXERCISE_DETAILS_BY_ID = "/exercise/details/retrieveById";
     public static final String EXERCISE_DETAILS_BY_ID_LIST = "/exercise/details/retrieveByIds";
+    public static final String CHAT_AI = "/chat/ai";
     private ApiRoute() {
     }
 
