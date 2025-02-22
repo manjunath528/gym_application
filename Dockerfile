@@ -4,8 +4,11 @@ FROM openjdk:17-jdk-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Maven wrapper and pom.xml files
+# Copy the project files
 COPY . /app/
+
+# Grant execute permissions to Maven wrapper
+RUN chmod +x /app/mvnw
 
 # Build the Spring Boot app (compile it)
 RUN ./mvnw clean package -DskipTests
