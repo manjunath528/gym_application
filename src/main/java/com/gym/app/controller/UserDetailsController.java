@@ -3,17 +3,21 @@ package com.gym.app.controller;
 
 import com.gym.app.baseframework.controller.BaseController;
 import com.gym.app.baseframework.exception.BaseException;
-import com.gym.app.entity.Workout;
+import com.gym.app.entity.*;
 import com.gym.app.service.UserDetailsService;
 import com.gym.app.service.UserService;
 import com.gym.app.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -130,6 +134,30 @@ public class UserDetailsController extends BaseController {
     public ResponseEntity<ExerciseResponse> getExerciseDetailsById(@RequestParam(value="id") Long id) throws BaseException {
         logger.info("getExerciseDetailsById: Received");
         return new ResponseEntity<>(userService.getExerciseById(id), HttpStatus.OK);
+    }
+    
+    @GetMapping(value=ApiRoute.ALL_USER_DETAILS)
+    public ResponseEntity<List<UserPersonalDetails>> getAllUsers() throws BaseException {
+        logger.info("getAllUsers: Received");
+        return new ResponseEntity<>(userService.getAllUserPersonalDetails(),HttpStatus.OK);
+    }
+
+    @GetMapping(value=ApiRoute.ALL_USER_PERSONAL_DETAILS_BY_DATE)
+    public ResponseEntity<List<UserPersonalDetails>> getAllUserPersonalDetailsByDate(@RequestParam(value="date") String date) throws BaseException {
+        logger.info("getAllUserPersonalDetailsByDate: Received");
+        return new ResponseEntity<>(userService.getAllUserPersonalDetailsAfterDate(date),HttpStatus.OK);
+    }
+
+    @GetMapping(value = ApiRoute.ALL_USER_ACCOUNT_DETAILS_BY_DATE)
+    public ResponseEntity<List<UserAccount>> getAllUserAccountsByDate(@RequestParam(value="date") String date) throws BaseException {
+        logger.info("getAllUserAccountsByDate: Received");
+        return new ResponseEntity<>(userService.getUserAccountsFromDate(date),HttpStatus.OK);
+    }
+
+    @GetMapping(ApiRoute.ALL_HEALTH_DETAILS_BY_DATE)
+    public ResponseEntity<List<UserHealthDetails>> getAllHealthDetailsByDate(@RequestParam(value="date") String date) throws BaseException {
+        logger.info("getAllHealthDetailsByDate: Received");
+        return new ResponseEntity<>(userService.getUserHealthDetailsByDate(date),HttpStatus.OK);
     }
 
 

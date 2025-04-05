@@ -1,6 +1,7 @@
 package com.gym.app.service.impl;
 
 import com.google.common.base.Strings;
+import com.gym.app.baseframework.exception.DataFormatException;
 import com.gym.app.baseframework.exception.SystemException;
 import com.gym.app.baseframework.exception.enums.ApiErrors;
 import com.gym.app.common.Constants;
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +29,7 @@ import java.util.Optional;
 @Service
 public class MessageCenterServiceImpl implements MessageCenterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MessageCenterService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageCenterServiceImpl.class);
 
     @Autowired
     MessageCenterRepository messageCenterRepository;

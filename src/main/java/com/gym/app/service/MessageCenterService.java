@@ -7,6 +7,7 @@ import com.gym.app.service.dto.MessageCenterRetrieveRequest;
 import com.gym.app.service.dto.MessageCenterUpdateRequest;
 import com.gym.app.service.dto.MessageUpdateRequest;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface MessageCenterService {

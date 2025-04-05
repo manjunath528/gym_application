@@ -25,6 +25,13 @@ public class Country implements Serializable {
     @Column(name = "country")
     private String country;
 
+    public Country() {
+    }
+    public Country(Long id, String country) {
+        this.id = id;
+        this.country = country;
+    }
+
     public Long getId() {
         return id;
     }

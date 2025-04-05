@@ -19,4 +19,6 @@ public interface CityRepository extends JpaRepository<City, Long> {
     @Query("SELECT city FROM City city where city.stateId IN (SELECT id FROM State state where lower(state.state) = " +
             "(SELECT lower(state.state) FROM State state where state.id=:stateId)) ORDER BY city.city ASC")
     List<City> cityDetailsForStateNameByStateId(@Param("stateId") Long stateId);
+
+
 }

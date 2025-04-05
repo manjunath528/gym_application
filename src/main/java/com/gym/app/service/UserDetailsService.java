@@ -1,11 +1,13 @@
 package com.gym.app.service;
 
-import com.gym.app.entity.Exercise;
-import com.gym.app.entity.Workout;
+import com.gym.app.entity.*;
 import com.gym.app.service.dto.*;
 
 import com.gym.app.baseframework.exception.SystemException;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -43,9 +45,12 @@ public interface UserDetailsService {
 
     ExerciseResponse getExerciseById(Long id) throws SystemException;
 
+    List<UserPersonalDetails> getAllUserPersonalDetails() throws SystemException;
 
+    List<UserPersonalDetails> getAllUserPersonalDetailsAfterDate(String date) throws SystemException;
 
+    List<UserAccount> getUserAccountsFromDate(String date) throws SystemException;
 
-
+    List<UserHealthDetails> getUserHealthDetailsByDate(String date) throws SystemException;
 
 }

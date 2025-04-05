@@ -4,7 +4,6 @@ import com.gym.app.baseframework.exception.enums.ApiErrors;
 import com.gym.app.entity.*;
 import com.gym.app.repository.*;
 import com.gym.app.service.UserDetailsService;
-import com.gym.app.service.UserService;
 import com.gym.app.service.dto.*;
 import com.gym.app.common.Constants;
 import com.gym.app.common.DateTimeFormatterUtil;
@@ -16,6 +15,11 @@ import org.springframework.stereotype.Service;
 
 import com.gym.app.baseframework.exception.SystemException;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +27,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserDetailsService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     UserAccountRepository userAccountRepository;
@@ -176,8 +180,7 @@ public class UserServiceImpl implements UserDetailsService {
                 logger.info("saveOrUpdateUserAccountProfile: SignUp requirements are completed for loginId -> {}, status -> {}", userAccountRequest.getLoginId(), Constants.STATUS_ACTIVE);
                 //messageCenterService.triggerMessage(Constants.SOURCE_SYSTEM, userAccountRequest.getLoginId(), Constants.MESSAGE_WELCOME, null);
                 userAccountResponse.setPersonal_details_status(Constants.STATUS_ACTIVE);
-
-        }
+            }
         }
 
         else {
@@ -550,6 +553,82 @@ public class UserServiceImpl implements UserDetailsService {
         exerciseResponse.setMuscleGroup(exercise.getMuscleGroup());
         exerciseResponse.setDescription(exercise.getDescription());
         return exerciseResponse;
+    }
+
+    @Override
+    public List<UserPersonalDetails> getAllUserPersonalDetails() throws SystemException {
+        List<UserPersonalDetails> details = userPersonalDetailsRepository.findAll();
+        System.out.println("Fetched User Details: " + details);
+        return details;
+    }
+
+    @Override
+    public List<UserPersonalDetails> getAllUserPersonalDetailsAfterDate(String date) throws SystemException {
+        if(date == null) {
+            logger.error("getAllUserPersonalDetailsAfterDate: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        try {
+            LocalDateTime localDateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+
+            if (timestamp == null) {
+                logger.error("getAllUserPersonalDetailsAfterDate: Timestamp is null");
+                throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+            }
+
+            List<UserPersonalDetails> userPersonalDetailsListByDate = userPersonalDetailsRepository.userPersonalDetailsByDate(timestamp);
+            return userPersonalDetailsListByDate;
+
+        } catch (DateTimeParseException e) {
+            logger.error("getAllUserPersonalDetailsAfterDate: Invalid date format - {}", date);
+            throw new SystemException(ApiErrors.INVALID_DATE_FORMAT);
+        }
+    }
+
+    @Override
+    public List<UserAccount> getUserAccountsFromDate(String date) throws SystemException {
+        if(date == null) {
+            logger.error("getUserAccountsFromDate: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        try{
+            LocalDateTime localDateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            if (timestamp == null) {
+                logger.error("getUserAccountsFromDate: Timestamp is null");
+                throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+            }
+            List<UserAccount> userAccountList = userAccountRepository.userAccountsByDate(timestamp);
+            return userAccountList;
+        }
+        catch (DateTimeParseException e) {
+            logger.error("getUserAccountsFromDate: Invalid date format - {}", date);
+            throw new SystemException(ApiErrors.INVALID_DATE_FORMAT);
+        }
+
+    }
+
+    @Override
+    public List<UserHealthDetails> getUserHealthDetailsByDate(String date) throws SystemException {
+        if(date == null) {
+            logger.error("getUserHealthDetails: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        try{
+            LocalDateTime localDateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            if (timestamp == null) {
+                logger.error("getUserHealthDetails: Timestamp is null");
+                throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+            }
+            List<UserHealthDetails> userHealthDetailsList = userHealthDetailsRepository.retrieveHealthDetailsFromDate(timestamp);
+            return userHealthDetailsList;
+        }
+        catch (DateTimeParseException e) {
+            logger.error("getUserHealthDetails: Invalid date format - {}", date);
+            throw new SystemException(ApiErrors.INVALID_DATE_FORMAT);
+        }
     }
 
 

@@ -7,14 +7,12 @@ public class Constants {
 
     private Constants() {
     }
-
     public static final String KEY_ACCEPT = "Accept";
     public static final String KEY_CONTENT_TYPE = "Content-Type";
     public static final String KEY_ORIGIN = "Origin";
     public static final String VALUE_CONTENT_TYPE_JSON = "application/json";
     public static final int RETRY_MAX_ATTEMPTS_EMAIL = 3;
     public static final int EXPIRY_HOURS_PACK_CALL = 1;
-
     public static final String SOURCE_SYSTEM = "System";
     public static final String STATUS_REGISTERED = "Registered";
     public static final String STATUS_ACTIVE = "Active";
@@ -48,9 +46,6 @@ public class Constants {
     public static final int LIMIT_RECORDS = 100;
     public static final int THRESHOLD_DAYS_LOGIN_ISSUES = 180;
     public static final int THRESHOLD_DAYS_USER_RATiNG = 30;
-
-
-
     //REGEX
     public static final String REGEX_USER = "$user$";
     public static final String REGEX_HOURS = "$hours$";

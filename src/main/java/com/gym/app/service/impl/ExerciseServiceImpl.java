@@ -6,8 +6,11 @@ import com.gym.app.entity.Workout;
 import com.gym.app.repository.ExerciseRepository;
 import com.gym.app.repository.WorkoutRepository;
 import com.gym.app.service.ExerciseService;
+import com.gym.app.service.UserService;
 import com.gym.app.service.dto.ExsByWorkIdListRequest;
 import com.gym.app.service.dto.ExsByWorkIdListResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +22,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
-
     @Autowired
     private ExerciseRepository exerciseRepository;
 
     @Autowired
     private WorkoutRepository workoutRepository;
-
 
     @Override
     public List<ExsByWorkIdListResponse> getExercisesForWorkouts(ExsByWorkIdListRequest exsByWorkIdListRequest) throws SystemException {

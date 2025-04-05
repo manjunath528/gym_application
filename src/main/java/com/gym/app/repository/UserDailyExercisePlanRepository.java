@@ -13,7 +13,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserDailyExercisePlanRepository extends JpaRepository<UserDailyExercisePlan, Long> {
-    @Query("SELECT userDailyExercisePlan from UserDailyExercisePlan userDailyExercisePlan where lower(userDailyExercisePlan.loginId)=lower(:loginId)")
-    UserHealthDetails findByLoginId(@Param("loginId") String loginId);
-
 }

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -25,4 +27,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
             "AND userAccount.password=:password")
     UserAccount userAuthorizationCheck(@Param("loginId") String loginId, @Param("password") String password);
 
+    @Query("SELECT userAccount FROM UserAccount userAccount WHERE userAccount.updatedTs >:date")
+    List<UserAccount> userAccountsByDate(@Param("date") Timestamp date);
 }

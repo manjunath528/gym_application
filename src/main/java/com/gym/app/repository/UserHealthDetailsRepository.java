@@ -10,6 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 /**
  * Created by Manjunath Reddy
  */
@@ -17,4 +20,7 @@ import org.springframework.stereotype.Repository;
 public interface UserHealthDetailsRepository extends JpaRepository<UserHealthDetails, Long> {
     @Query("SELECT userHealthDetails from UserHealthDetails userHealthDetails where lower(userHealthDetails.loginId)=lower(:loginId)")
     UserHealthDetails findByLoginId(@Param("loginId") String loginId);
+
+    @Query("SELECT userHealthDetails from UserHealthDetails userHealthDetails where userHealthDetails.updatedTs >:date")
+    List<UserHealthDetails> retrieveHealthDetailsFromDate(@Param("date") Timestamp date);
 }

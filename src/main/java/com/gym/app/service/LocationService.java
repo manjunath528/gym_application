@@ -16,7 +16,6 @@ public interface LocationService {
 
     List<Country> countryDetails() throws SystemException;
     List<State> stateDetailsByCountryId(Long countryId) throws SystemException;
-
     List<City> cityDetailsByStateId(Long stateId) throws SystemException;
 
 }

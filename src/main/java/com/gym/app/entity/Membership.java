@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 @Entity
@@ -62,8 +63,8 @@ public class Membership implements Serializable {
         return "Membership{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", price=" + price +
-                ", duration='" + duration + '\'' +
+                ", price='" + price + '\'' +
+                ", duration='" + duration +
                 '}';
     }
 }
