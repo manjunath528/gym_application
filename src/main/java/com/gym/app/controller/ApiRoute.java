@@ -44,7 +44,7 @@ public class ApiRoute {
     public static final String CHAT_AI = "/chat/ai";
 
     public static final String ALL_USER_DETAILS="/getUserDetails";
-    public static final String ALL_USER_PERSONAL_DETAILS_BY_DATE="/getUserDetails/date";
+    public static final String ALL_USER_PERSONAL_DETAILS_BY_DATE="/getUserPersonalDetails/date";
     public static final String ALL_USER_ACCOUNT_DETAILS_BY_DATE="/getUserAccountDetails/date";
     public static final String ALL_MESSAGE_DETAILS_BY_DATE="/getMessagesByDate/date";
     public static final String ALL_DAILY_DIET_DETAILS_BY_DATE="/getDailyDietDetails/date";

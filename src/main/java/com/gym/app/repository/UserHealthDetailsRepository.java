@@ -21,6 +21,6 @@ public interface UserHealthDetailsRepository extends JpaRepository<UserHealthDet
     @Query("SELECT userHealthDetails from UserHealthDetails userHealthDetails where lower(userHealthDetails.loginId)=lower(:loginId)")
     UserHealthDetails findByLoginId(@Param("loginId") String loginId);
 
-    @Query("SELECT userHealthDetails from UserHealthDetails userHealthDetails where userHealthDetails.updatedTs >:date")
-    List<UserHealthDetails> retrieveHealthDetailsFromDate(@Param("date") Timestamp date);
+    @Query("SELECT userHealthDetails from UserHealthDetails userHealthDetails where userHealthDetails.updatedTs >= :yDate AND userHealthDetails.updatedTs < :tDate")
+    List<UserHealthDetails> retrieveHealthDetailsFromDate(@Param("yDate") Timestamp yDate,@Param("tDate") Timestamp tDate);
 }

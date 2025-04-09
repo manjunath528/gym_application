@@ -27,6 +27,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
             "AND userAccount.password=:password")
     UserAccount userAuthorizationCheck(@Param("loginId") String loginId, @Param("password") String password);
 
-    @Query("SELECT userAccount FROM UserAccount userAccount WHERE userAccount.updatedTs >:date")
-    List<UserAccount> userAccountsByDate(@Param("date") Timestamp date);
+    @Query("SELECT userAccount FROM UserAccount userAccount WHERE userAccount.updatedTs >= :yDate AND userAccount.updatedTs < :tDate")
+    List<UserAccount> userAccountsByDate(@Param("yDate") Timestamp yDate, @Param("tDate") Timestamp tDate);
 }
