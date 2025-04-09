@@ -21,6 +21,6 @@ public interface UserPersonalDetailsRepository extends JpaRepository<UserPersona
     @Query("SELECT userPersonalDetails from UserPersonalDetails userPersonalDetails where lower(userPersonalDetails.loginId)=lower(:loginId)")
     UserPersonalDetails findByLoginId(@Param("loginId") String loginId);
 
-    @Query("SELECT userPersonalDetails FROM UserPersonalDetails userPersonalDetails WHERE userPersonalDetails.updatedTs >:date")
-    List<UserPersonalDetails> userPersonalDetailsByDate(@Param("date") Timestamp date);
+    @Query("SELECT userPersonalDetails FROM UserPersonalDetails userPersonalDetails WHERE userPersonalDetails.updatedTs >= :yDate AND userPersonalDetails.updatedTs < :tDate")
+    List<UserPersonalDetails> userPersonalDetailsByDate(@Param("yDate") Timestamp yDate, @Param("tDate") Timestamp tDate);
 }

@@ -571,17 +571,21 @@ public class UserServiceImpl implements UserDetailsService {
         try {
             LocalDateTime localDateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
-
-            if (timestamp == null) {
+            LocalDate inputDate = timestamp.toLocalDateTime().toLocalDate();
+            // Calculate yesterday's date
+            LocalDate yesterday = inputDate.minusDays(1);
+            // Convert the LocalDate for yesterday to start of the day (00:00:00) and end of the day (23:59:59)
+            Timestamp startOfYesterday = Timestamp.valueOf(yesterday.atStartOfDay()); // 00:00:00
+            Timestamp endOfYesterday = Timestamp.valueOf(yesterday.atTime(23, 59, 59));
+            if (startOfYesterday == null || endOfYesterday == null) {
                 logger.error("getAllUserPersonalDetailsAfterDate: Timestamp is null");
                 throw new SystemException(ApiErrors.NO_RECORD_FOUND);
             }
-
-            List<UserPersonalDetails> userPersonalDetailsListByDate = userPersonalDetailsRepository.userPersonalDetailsByDate(timestamp);
+            List<UserPersonalDetails> userPersonalDetailsListByDate = userPersonalDetailsRepository.userPersonalDetailsByDate(startOfYesterday, endOfYesterday);
             return userPersonalDetailsListByDate;
 
         } catch (DateTimeParseException e) {
-            logger.error("getAllUserPersonalDetailsAfterDate: Invalid date format - {}", date);
+            logger.error("getAllUserPersonalDetailsAfterDate: Invalid dateRequest format - {}", date);
             throw new SystemException(ApiErrors.INVALID_DATE_FORMAT);
         }
     }
