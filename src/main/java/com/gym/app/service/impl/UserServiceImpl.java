@@ -564,7 +564,7 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public List<UserPersonalDetails> getAllUserPersonalDetailsAfterDate(String date) throws SystemException {
-        if(date == null) {
+        if(Strings.isNullOrEmpty(date)) {
             logger.error("getAllUserPersonalDetailsAfterDate: Missing mandatory data");
             throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
         }
@@ -592,7 +592,7 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public List<UserAccount> getUserAccountsFromDate(String date) throws SystemException {
-        if(date == null) {
+        if(Strings.isNullOrEmpty(date)) {
             logger.error("getUserAccountsFromDate: Missing mandatory data");
             throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
         }
@@ -621,7 +621,7 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public List<UserHealthDetails> getUserHealthDetailsByDate(String date) throws SystemException {
-        if(date == null) {
+        if(Strings.isNullOrEmpty(date)) {
             logger.error("getUserHealthDetails: Missing mandatory data");
             throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
         }

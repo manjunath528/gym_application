@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -179,5 +180,33 @@ public class MessageCenterServiceImpl implements MessageCenterService {
         messageCenterRepository.save(messageCenter);
         logger.info("updateMessage: Response sent successfully");
         return messageCenter;
+    }
+
+    @Override
+    public List<MessageCenter> retrieveMessagesByDate(String date) throws SystemException {
+        if(Strings.isNullOrEmpty(date)) {
+            logger.error("retrieveMessagesByDate: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        try {
+            LocalDateTime localDateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            LocalDate inputDate = timestamp.toLocalDateTime().toLocalDate();
+            // Calculate yesterday's date
+            LocalDate yesterday = inputDate.minusDays(1);
+            // Convert the LocalDate for yesterday to start of the day (00:00:00) and end of the day (23:59:59)
+            Timestamp startOfYesterday = Timestamp.valueOf(yesterday.atStartOfDay()); // 00:00:00
+            Timestamp endOfYesterday = Timestamp.valueOf(yesterday.atTime(23, 59, 59));
+            if (startOfYesterday == null || endOfYesterday == null) {
+                logger.error("getAllUserPersonalDetailsAfterDate: Timestamp is null");
+                throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+            }
+            List<MessageCenter> messageCenterListByDate = messageCenterRepository.messagesByDate(startOfYesterday, endOfYesterday);
+            return messageCenterListByDate;
+        }
+        catch (DateTimeParseException e) {
+            logger.error("getAllUserPersonalDetailsAfterDate: ", e);
+            throw new SystemException(ApiErrors.NO_RECORD_FOUND);
+        }
     }
 }

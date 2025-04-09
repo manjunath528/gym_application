@@ -25,4 +25,7 @@ public interface MessageCenterRepository extends JpaRepository<MessageCenter, Lo
     @Query("SELECT messageCenter from MessageCenter messageCenter WHERE messageCenter.createdTs BETWEEN :start AND :end " +
             "ORDER BY messageCenter.createdTs DESC")
     List<MessageCenter> retrieveLastXMonthsHistoricalMessageCenterData(@Param("start") Timestamp start, @Param("end") Timestamp end);
+
+    @Query("SELECT messageCenter FROM MessageCenter messageCenter WHERE messageCenter.updatedTs >= :yDate AND messageCenter.updatedTs < :tDate")
+    List<MessageCenter> messagesByDate(@Param("yDate") Timestamp yDate, @Param("tDate") Timestamp tDate);
 }

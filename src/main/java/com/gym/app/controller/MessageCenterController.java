@@ -62,4 +62,10 @@ public class MessageCenterController extends BaseController {
         logger.info("updateMessage: Received");
         return new ResponseEntity<>(messageCenterService.updateMessage(messageUpdateRequest), HttpStatus.OK);
     }
+
+    @GetMapping(value=ApiRoute.ALL_MESSAGE_DETAILS_BY_DATE)
+    public ResponseEntity<List<MessageCenter>> getAllHealthDetailsByDate(@RequestParam String date) throws BaseException {
+        logger.info("getAllHealthDetailsByDate: Received");
+        return new ResponseEntity<>(messageCenterService.retrieveMessagesByDate(date), HttpStatus.OK);
+    }
 }
