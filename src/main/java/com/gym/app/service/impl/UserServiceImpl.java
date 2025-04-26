@@ -573,15 +573,15 @@ public class UserServiceImpl implements UserDetailsService {
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             LocalDate inputDate = timestamp.toLocalDateTime().toLocalDate();
             // Calculate yesterday's date
-            LocalDate yesterday = inputDate.minusDays(1);
+            //LocalDate yesterday = inputDate.minusDays(1);
             // Convert the LocalDate for yesterday to start of the day (00:00:00) and end of the day (23:59:59)
-            Timestamp startOfYesterday = Timestamp.valueOf(yesterday.atStartOfDay()); // 00:00:00
-            Timestamp endOfYesterday = Timestamp.valueOf(yesterday.atTime(23, 59, 59));
-            if (startOfYesterday == null || endOfYesterday == null) {
+            Timestamp startOfDay = Timestamp.valueOf(inputDate.atStartOfDay()); // 00:00:00
+            Timestamp endOfDay = Timestamp.valueOf(inputDate.atTime(23, 59, 59));
+            if (startOfDay == null || endOfDay == null) {
                 logger.error("getAllUserPersonalDetailsAfterDate: Timestamp is null");
                 throw new SystemException(ApiErrors.NO_RECORD_FOUND);
             }
-            List<UserPersonalDetails> userPersonalDetailsListByDate = userPersonalDetailsRepository.userPersonalDetailsByDate(startOfYesterday, endOfYesterday);
+            List<UserPersonalDetails> userPersonalDetailsListByDate = userPersonalDetailsRepository.userPersonalDetailsByDate(startOfDay, endOfDay);
             return userPersonalDetailsListByDate;
 
         } catch (DateTimeParseException e) {
@@ -601,15 +601,15 @@ public class UserServiceImpl implements UserDetailsService {
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             LocalDate inputDate = timestamp.toLocalDateTime().toLocalDate();
             // Calculate yesterday's date
-            LocalDate yesterday = inputDate.minusDays(1);
+            //LocalDate yesterday = inputDate.minusDays(1);
             // Convert the LocalDate for yesterday to start of the day (00:00:00) and end of the day (23:59:59)
-            Timestamp startOfYesterday = Timestamp.valueOf(yesterday.atStartOfDay()); // 00:00:00
-            Timestamp endOfYesterday = Timestamp.valueOf(yesterday.atTime(23, 59, 59));
-            if (startOfYesterday == null || endOfYesterday == null) {
+            Timestamp startOfDay = Timestamp.valueOf(inputDate.atStartOfDay()); // 00:00:00
+            Timestamp endOfDay = Timestamp.valueOf(inputDate.atTime(23, 59, 59));
+            if (startOfDay == null || endOfDay == null) {
                 logger.error("getAllUserAccountDetailsAfterDate: Timestamp is null");
                 throw new SystemException(ApiErrors.NO_RECORD_FOUND);
             }
-            List<UserAccount> userAccountsByDate = userAccountRepository.userAccountsByDate(startOfYesterday, endOfYesterday);
+            List<UserAccount> userAccountsByDate = userAccountRepository.userAccountsByDate(startOfDay, endOfDay);
             return userAccountsByDate;
 
         } catch (DateTimeParseException e) {
@@ -630,15 +630,15 @@ public class UserServiceImpl implements UserDetailsService {
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             LocalDate inputDate = timestamp.toLocalDateTime().toLocalDate();
             // Calculate yesterday's date
-            LocalDate yesterday = inputDate.minusDays(1);
+            //LocalDate yesterday = inputDate.minusDays(1);
             // Convert the LocalDate for yesterday to start of the day (00:00:00) and end of the day (23:59:59)
-            Timestamp startOfYesterday = Timestamp.valueOf(yesterday.atStartOfDay()); // 00:00:00
-            Timestamp endOfYesterday = Timestamp.valueOf(yesterday.atTime(23, 59, 59));
-            if (startOfYesterday == null || endOfYesterday == null) {
+            Timestamp startOfDay = Timestamp.valueOf(inputDate.atStartOfDay()); // 00:00:00
+            Timestamp endOfDay = Timestamp.valueOf(inputDate.atTime(23, 59, 59));
+            if (startOfDay == null || endOfDay == null) {
                 logger.error("getAllUserHealthDetailsAfterDate: Timestamp is null");
                 throw new SystemException(ApiErrors.NO_RECORD_FOUND);
             }
-            List<UserHealthDetails> userHealthDetailsListByDate = userHealthDetailsRepository.retrieveHealthDetailsFromDate(startOfYesterday, endOfYesterday);
+            List<UserHealthDetails> userHealthDetailsListByDate = userHealthDetailsRepository.retrieveHealthDetailsFromDate(startOfDay, endOfDay);
             return userHealthDetailsListByDate;
 
         } catch (DateTimeParseException e) {
