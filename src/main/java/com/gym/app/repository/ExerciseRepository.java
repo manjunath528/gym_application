@@ -16,4 +16,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     @Query("SELECT exercise FROM Exercise exercise WHERE exercise.workoutId IN :workoutIds")
     List<Exercise> findByWorkoutIdList(@Param("workoutIds") List<Long> workoutIds);
+
+    @Query("SELECT exercise FROM Exercise exercise WHERE exercise.muscleGroup=:muscleGroup")
+    List<Exercise> findByMuscleGroup(String muscleGroup);
 }

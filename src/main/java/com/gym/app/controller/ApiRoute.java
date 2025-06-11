@@ -50,6 +50,7 @@ public class ApiRoute {
     public static final String ALL_DAILY_DIET_DETAILS_BY_DATE="/getDailyDietDetails/date";
     public static final String ALL_DAILY_EXERCISE_DETAILS_BY_DATE="/getDailyExerciseDetails/date";
     public static final String ALL_HEALTH_DETAILS_BY_DATE="/getHealthDetailsByDate/date";
+    public static final String CREATE_WORKOUT_PLAN="/create/workoutPlan";
 
     private ApiRoute() {
     }
