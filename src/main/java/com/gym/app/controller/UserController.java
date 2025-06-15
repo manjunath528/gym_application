@@ -1,5 +1,6 @@
 package com.gym.app.controller;
 
+import com.gym.app.baseframework.exception.SystemException;
 import com.gym.app.entity.Users;
 import com.gym.app.repository.UserRepo;
 import com.gym.app.service.UserService;
@@ -23,7 +24,7 @@ public class UserController {
 
     }
     @PostMapping("/login")
-    public String login(@RequestBody Users user) {
+    public String login(@RequestBody Users user) throws SystemException {
         return service.verify(user);
     }
 }

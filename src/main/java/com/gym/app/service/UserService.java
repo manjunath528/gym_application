@@ -1,5 +1,7 @@
 package com.gym.app.service;
 
+import com.gym.app.baseframework.exception.SystemException;
+import com.gym.app.baseframework.exception.enums.ApiErrors;
 import com.gym.app.entity.Users;
 import com.gym.app.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,24 +24,28 @@ public class UserService {
     AuthenticationManager authManager;
 
     @Autowired
-    private UserRepo repo;
+    private UserRepo userRepo;
 
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public Users register(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        repo.save(user);
+        userRepo.save(user);
         return user;
     }
 
-    public String verify(Users user) {
+    public String verify(Users user) throws SystemException {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+            Users dbUser = userRepo.findByUsername(user.getUsername()).orElseThrow(()->new SystemException(ApiErrors.USER_DOESNOT_EXISTS));
+            dbUser.setTokenVersion(dbUser.getTokenVersion()+1);
+            userRepo.save(dbUser);
+            return jwtService.generateToken(dbUser);
+
         }
         else {
-            return "Failed";
+            throw new SystemException(ApiErrors.INVALID_REQUEST);
         }
     }
 }

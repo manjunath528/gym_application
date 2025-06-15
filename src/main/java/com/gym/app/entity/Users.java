@@ -9,7 +9,7 @@ public class Users {
     private int id;
     private String username;
     private String password;
-
+    private int tokenVersion = 1;
     public int getId() {
         return id;
     }
@@ -34,12 +34,20 @@ public class Users {
         this.password = password;
     }
 
+    public int getTokenVersion() {
+        return tokenVersion;
+    }
+
+    public void setTokenVersion(int tokenVersion) {
+        this.tokenVersion = tokenVersion;
+    }
     @Override
     public String toString() {
         return "Users{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", tokenVersion=" + tokenVersion +
                 '}';
     }
 }

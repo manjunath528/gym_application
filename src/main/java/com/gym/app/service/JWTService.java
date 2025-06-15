@@ -1,6 +1,7 @@
 package com.gym.app.service;
 
 
+import com.gym.app.entity.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -34,21 +35,21 @@ public class JWTService {
         }
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Users user) {
         long expirationTime = 1000 * 60 * 60 * 24 * 7;
         Map<String, Object> claims = new HashMap<>();
+        claims.put("tokenVersion", user.getTokenVersion()); // ✅ Must be present
+        return createToken(claims, user.getUsername());
+    }
+    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .claims()
-                .add(claims)
-                .subject(username)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expirationTime))
-                .and()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(getKey())
                 .compact();
-
     }
-
     private SecretKey getKey(){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -83,6 +84,17 @@ public class JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public Integer extractTokenVersion(String token) {
+        Object version = extractClaim(token, claims -> claims.get("tokenVersion"));
+        if (version instanceof Integer) {
+            return (Integer) version;
+        } else if (version instanceof Number) {
+            return ((Number) version).intValue();
+        } else {
+            return null;
+        }
     }
 
 }
