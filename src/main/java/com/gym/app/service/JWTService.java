@@ -36,9 +36,8 @@ public class JWTService {
     }
 
     public String generateToken(Users user) {
-        long expirationTime = 1000 * 60 * 60 * 24 * 7;
         Map<String, Object> claims = new HashMap<>();
-        claims.put("tokenVersion", user.getTokenVersion()); // ✅ Must be present
+        claims.put("tokenVersion", user.getTokenVersion());
         return createToken(claims, user.getUsername());
     }
     private String createToken(Map<String, Object> claims, String subject) {

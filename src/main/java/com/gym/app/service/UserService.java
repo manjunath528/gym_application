@@ -30,7 +30,6 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
     public Users register(Users user) {
         logger.info("User Details to Signin : Received -> {}",user.getUsername());
