@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping(ApiRoute.BASE_MAPPING_API_V1)
 @CrossOrigin(origins = "*")
 public class UserDetailsController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsController.class);
 
     @Autowired
     private UserDetailsService userService;
