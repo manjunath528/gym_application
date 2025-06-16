@@ -22,8 +22,6 @@ public interface MessageCenterService {
 
     MessageCenter updateMessageMetaData(MessageCenterUpdateRequest messageCenterUpdateRequest) throws SystemException;
 
-    List<MessageCenter> retrieveLastXMonthsHistoricalMessageCenterData(int durationMonths) throws SystemException;
-
     MessageCenter updateMessage(MessageUpdateRequest messageUpdateRequest) throws SystemException;
 
     List<MessageCenter> retrieveMessagesByDate(String date) throws SystemException;
