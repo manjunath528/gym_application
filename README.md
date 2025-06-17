@@ -64,9 +64,7 @@ The diagram below illustrates how JWT (JSON Web Token) authentication is impleme
 
 👉 This approach ensures stateless, secure communication between client and server, without maintaining server-side session data.
 
-✅ Tip: You can embed your diagram image right below this description like so:
-
-
+![Image](https://github.com/user-attachments/assets/c1941c3f-b354-45a8-be72-2c7a02a89892)
 
 
 ## 📂 API Endpoints
