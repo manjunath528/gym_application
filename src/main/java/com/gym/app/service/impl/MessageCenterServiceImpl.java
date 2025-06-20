@@ -147,14 +147,6 @@ public class MessageCenterServiceImpl implements MessageCenterService {
     }
 
     @Override
-    public List<MessageCenter> retrieveLastXMonthsHistoricalMessageCenterData(int durationMonths) throws SystemException {
-        logger.info("retrieveLastXMonthsHistoricalMessageCenterData: Retrieve for last {} months.", durationMonths);
-        List<MessageCenter> messageCenterList = messageCenterRepository.retrieveLastXMonthsHistoricalMessageCenterData(DateTimeFormatterUtil.getLastXMonthsUTCTimeStamp(durationMonths), DateTimeFormatterUtil.getCurrentTimestampInUTC());
-        logger.info("retrieveLastXMonthsHistoricalMessageCenterData: Returned response for last {} months of size {}.", durationMonths, messageCenterList.size());
-        return messageCenterList;
-    }
-
-    @Override
     public MessageCenter updateMessage(MessageUpdateRequest messageUpdateRequest) throws SystemException {
         logger.info("updateMessage: Request -> {}", messageUpdateRequest);
         if(messageUpdateRequest.getMessageId() == null || Strings.isNullOrEmpty(messageUpdateRequest.getLoginId())) {

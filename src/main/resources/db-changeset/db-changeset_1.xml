@@ -213,5 +213,61 @@
                                  referencedTableName="workout"/>
     </changeSet>
 
+    <changeSet id="badge" author="Manjunath Reddy">
+        <createTable tableName="badge">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_BADGE_ID"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(1024)"/>
+            <column name="criteria" type="VARCHAR(255)"/> <!-- e.g., '10_workouts', 'first_login' -->
+            <!-- <column name="icon_url" type="VARCHAR(512)"/>  optional image/icon -->
+            <column name="target_value" type="INT" defaultValueNumeric="1"/>
+            <column name="created_ts" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <createSequence sequenceName="sequence_badge"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+    </changeSet>
 
+    <changeSet id="user_badge" author="Manjunath Reddy">
+        <createTable tableName="user_badge">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_USER_BADGE_ID"/>
+            </column>
+            <column name="login_id" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="badge_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="awarded_ts" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <createSequence sequenceName="sequence_user_badge"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+        <addForeignKeyConstraint baseColumnNames="login_id"
+                                 baseTableName="user_badge"
+                                 constraintName="FMC_FK_USER_BADGE_LOGIN_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="login_id"
+                                 referencedTableName="user_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="badge_id"
+                                 baseTableName="user_badge"
+                                 constraintName="FMC_FK_USER_BADGE_BADGE_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="badge"/>
+    </changeSet>
 </databaseChangeLog>
