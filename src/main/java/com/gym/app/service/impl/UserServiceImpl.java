@@ -46,6 +46,9 @@ public class UserServiceImpl implements UserDetailsService {
     @Autowired
     ExerciseRepository exerciseRepository;
 
+    @Autowired
+    private UserLoginDataRepository loginDataRepository;
+
     @Override
     public UserSignUpResponse signUp(UserSignUpRequest userSignUpRequest) throws SystemException {
         logger.info("Request received -> {}", userSignUpRequest);
@@ -106,6 +109,10 @@ public class UserServiceImpl implements UserDetailsService {
             logger.error("userLogin: Password mismatch for -> {}", userLogInRequest.getLoginId());
             throw new SystemException(ApiErrors.USER_ACCOUNT_PASSWORD_MISMATCH);
         }
+        LoginData loginData = new LoginData();
+        loginData.setLoginId(userLogInRequest.getLoginId());
+        loginData.setLoginTimestamp(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+        loginDataRepository.save(loginData);
         userLogInResponse.setLoginId(userLogInRequest.getLoginId());
         userLogInResponse.setEmailId(userAccount.getEmailId());
         userLogInResponse.setAccountStatus(userAccount.getPersonal_details_status());
@@ -122,6 +129,14 @@ public class UserServiceImpl implements UserDetailsService {
         }
         logger.info("userLogout: User logout for loginId -> {}", userLogOutRequest.getLoginId());
         //TODO -- Expire the token
+        List<LoginData> recentLogins = loginDataRepository.findAllByLoginIdOrderByLoginTimestampDesc(userLogOutRequest.getLoginId());
+        if (!recentLogins.isEmpty()) {
+            LoginData latest = recentLogins.get(0);
+            if (latest.getLogoutTimestamp() == null) {
+                latest.setLogoutTimestamp(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+                loginDataRepository.save(latest);
+            }
+        }
         UserLogOutResponse userLogOutResponse = new UserLogOutResponse();
         userLogOutResponse.setLoginId(userLogOutRequest.getLoginId());
         userLogOutResponse.setMessage(Constants.USER_LOGOUT_MESSAGE);

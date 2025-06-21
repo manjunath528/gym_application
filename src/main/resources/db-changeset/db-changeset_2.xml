@@ -66,4 +66,31 @@
                                  referencedTableName="user_account"/>
 
     </changeSet>
+    <changeSet id="login_data_table" author="Manjunath Reddy">
+        <createTable tableName="login_data">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_LOGIN_DATA"/>
+            </column>
+            <column name="login_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login_timestamp" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="logout_timestamp" type="TIMESTAMP"/>
+        </createTable>
+        <createSequence sequenceName="sequence_login_data"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+        <addForeignKeyConstraint
+                constraintName="fk_login_data_user_account"
+                baseTableName="login_data"
+                baseColumnNames="login_id"
+                referencedTableName="user_account"
+                referencedColumnNames="login_id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+
 </databaseChangeLog>

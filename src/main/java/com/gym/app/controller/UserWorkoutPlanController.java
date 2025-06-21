@@ -1,5 +1,6 @@
 package com.gym.app.controller;
 
+import com.gym.app.baseframework.exception.BaseException;
 import com.gym.app.service.UserWorkoutPlanService;
 import com.gym.app.service.dto.PlanSelectionRequest;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class UserWorkoutPlanController {
     private UserWorkoutPlanService workoutPlanService;
 
     @PostMapping(value = ApiRoute.CREATE_WORKOUT_PLAN)
-    public ResponseEntity<String> createPlan(@RequestBody PlanSelectionRequest request) {
+    public ResponseEntity<String> createPlan(@RequestBody PlanSelectionRequest request) throws BaseException {
         logger.info("PlanSelectionRequest :Received");
         workoutPlanService.createWorkoutPlan(request);
         return ResponseEntity.ok("Workout Plan Created Successfully");

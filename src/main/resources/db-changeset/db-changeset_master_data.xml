@@ -11,5 +11,6 @@
         <loadData tableName="memberships" file="db_data/memberships.csv"/>
         <loadData tableName="workout" file="db_data/workouts.csv"/>
         <loadData tableName="exercise" file="db_data/exercises.csv"/>
+        <loadData tableName="badge" file="db_data/badge.csv"/>
     </changeSet>
 </databaseChangeLog>

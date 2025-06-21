@@ -19,6 +19,7 @@ public class ApiRoute {
     public static final String LOCATION_STATE_BY_COUNTRY_ID = "/location/state";
     public static final String LOCATION_CITY_BY_STATE_ID = "/location/city";
     public static final String USER_SIGN_UP = "/user/signUp";
+    public static final String WORKOUT_SCHEDULE_UPDATE = "/user/workoutSchedule";
     public static final String USER_LOG_IN = "/user/login";
     public static final String USER_LOG_OUT = "/user/logout";
     public static final String USER_FORGOT_PASSWORD = "/user/forgotPassword";
